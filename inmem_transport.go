@@ -66,6 +66,11 @@ func NewInmemTransport(addr ServerAddress) (ServerAddress, *InmemTransport) {
 	return NewInmemTransportWithTimeout(addr, 50*time.Millisecond)
 }
 
+// Proxy is an extension that allows for a proxy to receive and feed the transport.
+func (i *InmemTransport) Proxy() chan RPC {
+	return i.consumerCh
+}
+
 // SetHeartbeatHandler is used to set optional fast-path for
 // heartbeats, not supported for this transport.
 func (i *InmemTransport) SetHeartbeatHandler(cb func(RPC)) {
