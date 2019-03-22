@@ -903,8 +903,8 @@ func (r *Raft) processLogs(index uint64, future *logFuture) {
 		} else {
 			l := new(Log)
 			if err := r.logs.GetLog(idx, l); err != nil {
-				r.logger.Printf("[ERR] raft: Failed to get log at %d: %v", idx, err)
-				panic(err)
+				r.logger.Printf("[WARN] raft: Failed to get log at %d: %v", idx, err)
+				continue // Allow for deleted entries -f/g 3/22/19
 			}
 			r.processLog(l, nil)
 		}
