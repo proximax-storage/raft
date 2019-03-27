@@ -512,6 +512,8 @@ func (r *Raft) setPreviousLog(req *AppendEntriesRequest, nextIndex uint64) error
 		var l Log
 		ndx := nextIndex
 
+		lastIndex, _ := r.logs.LastIndex()
+		maxIndex := min(nextIndex+uint64(r.conf.MaxAppendEntries)-1, lastIndex)
 	findFirstIndex:
 		for {
 			// Find the first index. Loop is necessary in case
@@ -521,7 +523,10 @@ func (r *Raft) setPreviousLog(req *AppendEntriesRequest, nextIndex uint64) error
 					ndx-1, err)
 
 				ndx++
-				continue
+
+				if ndx < maxIndex {
+					continue
+				}
 			}
 			break findFirstIndex
 		}
