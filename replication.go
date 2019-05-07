@@ -524,8 +524,7 @@ func (r *Raft) setPreviousLog(req *AppendEntriesRequest, nextIndex uint64) error
 			// Find the first index. Loop is necessary in case
 			// entries were deleted. -f/g 3/22/19
 			if err := r.logs.GetLog(ndx-1, &l); err != nil {
-				r.logger.Printf("[WARN] raft: Failed to get log at index %d: %v",
-					ndx-1, err)
+				//r.logger.Printf("[WARN] raft: Failed to get log at index %d: %v (2)", ndx-1, err)
 
 				ndx++
 
@@ -551,7 +550,7 @@ func (r *Raft) setNewLogs(req *AppendEntriesRequest, nextIndex, lastIndex uint64
 	for i := nextIndex; i <= maxIndex; i++ {
 		oldLog := new(Log)
 		if err := r.logs.GetLog(i, oldLog); err != nil {
-			r.logger.Printf("[WARN] raft: Failed to get log at index %d: %v", i, err)
+			//r.logger.Printf("[WARN] raft: Failed to get log at index %d: %v (1)", i, err)
 			continue // Allow for deleted entries -f/g 3/22/19
 		}
 		req.Entries = append(req.Entries, oldLog)

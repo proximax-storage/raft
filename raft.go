@@ -674,9 +674,12 @@ func (r *Raft) checkLeaderLease() time.Duration {
 			// Log at least once at high value, then debug. Otherwise it gets very verbose.
 			if diff <= 3*r.conf.LeaderLeaseTimeout {
 				r.logger.Printf("[WARN] raft: Failed to contact %v in %v", peer, diff)
-			} else {
-				r.logger.Printf("[DEBUG] raft: Failed to contact %v in %v", peer, diff)
 			}
+
+			// -f/g 5/7/19 annoying and clutters the log when trying to debug 
+			// } else {
+			// 	r.logger.Printf("[DEBUG] raft: Failed to contact %v in %v", peer, diff)
+			// }
 		}
 		metrics.AddSample([]string{"raft", "leader", "lastContact"}, float32(diff/time.Millisecond))
 	}
@@ -890,7 +893,7 @@ func (r *Raft) processLogs(index uint64, future *logFuture) {
 	// Reject logs we've applied already
 	lastApplied := r.getLastApplied()
 	if index <= lastApplied {
-		r.logger.Printf("[WARN] raft: Skipping application of old log: %d", index)
+		r.logger.Printf("[WARN] raft: Skipping application of old log: %d", index) 
 		return
 	}
 
@@ -903,7 +906,7 @@ func (r *Raft) processLogs(index uint64, future *logFuture) {
 		} else {
 			l := new(Log)
 			if err := r.logs.GetLog(idx, l); err != nil {
-				r.logger.Printf("[WARN] raft: Failed to get log at %d: %v", idx, err)
+				//r.logger.Printf("[WARN] raft: Failed to get log at %d: %v (0)", idx, err)
 				continue // Allow for deleted entries -f/g 3/22/19
 			}
 			r.processLog(l, nil)

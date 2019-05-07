@@ -1,6 +1,7 @@
 package raft
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"time"
@@ -113,7 +114,7 @@ func (r *Raft) shouldSnapshot() bool {
 
 	// Compare the delta to the threshold
 	delta := lastIdx - lastSnap
-	return delta >= r.conf.SnapshotThreshold
+	return (r.conf.SnapshotThreshold > 0 && delta >= r.conf.SnapshotThreshold) // -f/g changed so that SnapshotThreshold=0 disables snapshots 
 }
 
 // takeSnapshot is used to take a new snapshot. This must only be called from
@@ -140,6 +141,12 @@ func (r *Raft) takeSnapshot() (string, error) {
 		}
 		return "", err
 	}
+
+	// -f/g 5/6/19 make sure snapshot exists before moving forward.
+	if snapReq.snapshot == nil {
+		return "", errors.New("snapshot aborted")
+	} 
+
 	defer snapReq.snapshot.Release()
 
 	// Make a request for the configurations and extract the committed info.
