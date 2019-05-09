@@ -676,7 +676,7 @@ func (r *Raft) checkLeaderLease() time.Duration {
 				r.logger.Printf("[WARN] raft: Failed to contact %v in %v", peer, diff)
 			}
 
-			// -f/g 5/7/19 annoying and clutters the log when trying to debug 
+			// -f/g 5/7/19 annoying and clutters the log when trying to debug
 			// } else {
 			// 	r.logger.Printf("[DEBUG] raft: Failed to contact %v in %v", peer, diff)
 			// }
@@ -893,7 +893,10 @@ func (r *Raft) processLogs(index uint64, future *logFuture) {
 	// Reject logs we've applied already
 	lastApplied := r.getLastApplied()
 	if index <= lastApplied {
-		r.logger.Printf("[WARN] raft: Skipping application of old log: %d", index) 
+		// -f/g 5/9/19 Note: https://github.com/hashicorp/consul/issues/1126
+		// Seems to occur when node is backfilling and is not the result of tight loop. We can
+		// comment out the log entry if it gets annoying.
+		r.logger.Printf("[WARN] raft: Skipping application of old log: %d", index)
 		return
 	}
 
