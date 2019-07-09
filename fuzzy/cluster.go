@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/peerstreaminc/raft"
+	"github.com/proximax-storage/raft"
 )
 
 type appliedItem struct {
