@@ -8,7 +8,7 @@ import (
 
 	"github.com/peerstream/raft"
 
-	rdb "github.com/peerstreaminc/raft-boltdb"
+	rdb "github.com/proximax-storage/raft-boltdb"
 )
 
 type raftNode struct {

@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-msgpack/codec"
-	"github.com/peerstreaminc/raft"
+	"github.com/proximax-storage/raft"
 )
 
 var (

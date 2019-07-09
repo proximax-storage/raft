@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/peerstreaminc/raft"
+	"github.com/proximax-storage/raft"
 )
 
 type logHash struct {
